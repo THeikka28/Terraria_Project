@@ -1,7 +1,6 @@
 //Basic Game Application
 //Version 2
 // Basic Object, Image, Movement
-// Astronaut moves to the right.
 // Threaded
 
 //K. Chun 8/2018
@@ -17,12 +16,21 @@ import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+
+
+
+
 
 
 //*******************************************************************************
 // Class Definition Section
 
-public class BasicGameApp implements Runnable {
+public class BasicGameApp implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
    //Variable Definition Section
    //Declare the variables used in the program 
@@ -36,13 +44,23 @@ public class BasicGameApp implements Runnable {
 	public JFrame frame;
 	public Canvas canvas;
    public JPanel panel;
-   
+   public boolean right;
+   public boolean left;
+   int mousex = 1, mousey =1;
+   public Sword slash;
+
 	public BufferStrategy bufferStrategy;
-	public Image astroPic;
+	public Image TerrarianPic;
+	public Image swordpic;
+	public EyeofCthulu boss;
+	public boolean islanding;
+	public Walls arena[];
+
 
    //Declare the objects used in the program
    //These are things that are made up of more than one variable type
-	private Astronaut astro;
+	public Terrarian player;
+	public Walls floor;
 
 
    // Main method definition
@@ -62,9 +80,18 @@ public class BasicGameApp implements Runnable {
       setUpGraphics();
        
       //variable and objects
-      //create (construct) the objects needed for the game and load up 
-		astroPic = Toolkit.getDefaultToolkit().getImage("astronaut.png"); //load the picture
-		astro = new Astronaut(10,100);
+      //create (construct) the objects needed for the game and load up
+		player = new Terrarian(10,100);
+		swordpic = Toolkit.getDefaultToolkit().getImage("Sword.png"); //load the picture
+		slash = new Sword((int)(player.xpos+(player.width/2)), (int) (player.xpos+(player.width/2)));
+		floor = new Walls(0,600,1000,200);
+		boss = new EyeofCthulu(100,100);
+		arena = new Walls[6];
+		floor.ispassable = false;
+		for(int j = 0; j<arena.length; j++)
+		{
+			arena[j] = new Walls(0, j*125, 1000, 30);
+		}
 
 
 	}// BasicGameApp()
@@ -81,8 +108,9 @@ public class BasicGameApp implements Runnable {
 
       //for the moment we will loop things forever.
 		while (true) {
-
+		crashing();
          moveThings();  //move all the game objects
+
          render();  // paint the graphics
          pause(20); // sleep for 10 ms
 		}
@@ -92,7 +120,115 @@ public class BasicGameApp implements Runnable {
 	public void moveThings()
 	{
       //calls the move( ) code in the objects
-		astro.move();
+		player.move();
+		if (right == true && player.dx <10)
+		{
+
+			player.dx = player.dx + 1;
+		}
+		if (left == true && player.dx >-10)
+		{
+			player.dx = player.dx-1;
+		}
+
+			if(slash.isattacking == false)
+			{
+				slash.hitbox = new Rectangle((int) player.xpos+3, (int) player.ypos+3,  1, 1);
+			}
+			slash.xpos = (player.xpos+(player.width/2));
+			slash.ypos = (player.ypos+(player.height/2));
+			slash.attack();
+			if(slash.isattacking == true)
+			{
+				slash.drawangle = slash.drawangle+0.1;
+			}
+		if(player.dx >0) {
+			TerrarianPic = Toolkit.getDefaultToolkit().getImage("Terrarianpic.png"); //load the picture
+		}
+		if(player.dx <=0) {
+			TerrarianPic = Toolkit.getDefaultToolkit().getImage("Terrarianpic2.png"); //load the picture
+		}
+		if(boss.isturning == true)
+		{
+			boss.scale = boss.speed/Math.sqrt(((player.xpos - boss.xpos) * (player.xpos - boss.xpos)) + ((player.ypos - boss.ypos) * (player.ypos - boss.ypos)));
+			boss.dy = (player.ypos - boss.ypos)*boss.scale;
+			boss.dx = (player.xpos - boss.xpos)*boss.scale;
+		}
+		if(boss.isphase1 == true)
+		{
+
+			boss.stalk(player.xpos, player.ypos);
+		}
+		boss.move();
+
+	}
+
+
+	public void crashing()
+	{
+		if(!slash.hitbox.intersects(boss.hitbox))
+		{
+			boss.isdamaged = false;
+		}
+		if(player.hitbox.intersects(floor.hitbox))
+		{
+			if(islanding == false && player.ispassing == false )
+			{
+				player.isgrounded = true;
+				player.ypos = 600-player.height;
+			}
+			if(islanding == false && player.ispassing == true )
+			{
+				if(floor.ispassable == false) {
+					player.isgrounded = true;
+					player.ypos = 600 - player.height;
+				}
+			}
+		}
+		if(!player.hitbox.intersects(floor.hitbox))
+		{
+			islanding = false;
+		}
+		if (!player.hitbox.intersects(floor.hitbox))
+		{
+			player.isgrounded = false;
+		}
+		for(int x=0; x<arena.length; x++){
+		if (player.hitbox.intersects(arena[x].hitbox) && player.ypos < (arena[x].ypos-90))
+		{
+			if(!player.ispassing) {
+				player.isgrounded = true;
+				player.ypos = arena[x].ypos - player.height;
+			}
+
+
+		}
+		}
+		if(slash.hitbox.intersects(boss.hitbox) && boss.isdamaged == false)
+		{
+			boss.isdamaged = true;
+			boss.health = boss.health-player.strength;
+			System.out.println(boss.health);
+		}
+		if(!player.hitbox.intersects(boss.hitbox))
+		{
+			player.isdamaged = false;
+		}
+		if(!player.hitbox.intersects(boss.hitbox))
+		{
+			player.isdamaged = false;
+		}
+		if(System.currentTimeMillis() - player.iframes > 1000)
+		{
+			player.isdamaged = false;
+		}
+		if(player.hitbox.intersects(boss.hitbox) && player.isdamaged == false)
+		{
+			player.isdamaged = true;
+			player.health = player.health-boss.strenth;
+			System.out.println(player.health);
+			player.iframes = System.currentTimeMillis();
+		}
 
 	}
 	
@@ -119,8 +255,12 @@ public class BasicGameApp implements Runnable {
       canvas = new Canvas();  
       canvas.setBounds(0, 0, WIDTH, HEIGHT);
       canvas.setIgnoreRepaint(true);
-   
-      panel.add(canvas);  // adds the canvas to the panel.
+	  canvas.addKeyListener(this);
+	  canvas.addMouseListener(this);
+
+
+
+	   panel.add(canvas);  // adds the canvas to the panel.
    
       // frame operations
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //makes the frame close and exit nicely
@@ -132,8 +272,7 @@ public class BasicGameApp implements Runnable {
       canvas.createBufferStrategy(2);
       bufferStrategy = canvas.getBufferStrategy();
       canvas.requestFocus();
-      System.out.println("DONE graphic setup");
-   
+
    }
 
 
@@ -141,12 +280,127 @@ public class BasicGameApp implements Runnable {
 	private void render() {
 		Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
 		g.clearRect(0, 0, WIDTH, HEIGHT);
+		g.drawImage(TerrarianPic, (int)player.xpos, (int)player.ypos, (int) player.width, (int)player.height, null );
+		g.drawImage(TerrarianPic, (int)boss.xpos, (int)boss.ypos, (int) boss.width, (int)boss.height, null );
 
-      //draw the image of the astronaut
-		g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
+
+
+
+		//g.drawImage(, (int)player.xpos, (int)player.ypos, player.width, player.height, null);
+		g.drawRect(floor.hitbox.x, floor.hitbox.y, floor.hitbox.width, floor.hitbox.height);
+		g.drawRect(player.hitbox.x, player.hitbox.y, player.hitbox.width, player.hitbox.height);
+		g.drawRect(slash.hitbox.x,slash.hitbox.y,slash.hitbox.width,slash.hitbox.height);
+		for(int j =0; j<arena.length; j++)
+		{
+			g.fillRect(arena[j].hitbox.x, arena[j].hitbox.y, arena[j].hitbox.width, 5 );
+		}
+
+
 
 		g.dispose();
 
 		bufferStrategy.show();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e)
+	{
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e)
+	{
+		if(e.getKeyCode() ==69)
+		{
+			player.grapple(mousex,mousey);
+		}
+
+		if(e.getKeyCode() == 65 && player.dx>-10)
+		{
+			left = true;
+
+		}
+		if(e.getKeyCode() == 32)
+		{
+			if(player.isgrounded == true)
+			{
+				player.dy = -10.5;
+				player.ypos = player.ypos - 10;
+			}
+		}
+		if(e.getKeyCode() == 68 && player.dx<10)
+		{
+			right = true;
+		}
+		if(e.getKeyCode() == 83)
+		{player.ispassing = true;}
+
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e)
+	{
+		if(e.getKeyCode() == 68)
+		{
+			right = false;
+			player.dx = 0;
+		}
+		if(e.getKeyCode() == 65)
+		{
+			left = false;
+			player.dx = 0;
+		}
+		if(e.getKeyCode() == 83)
+		{player.ispassing = false;
+		}
+
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		mousex = e.getX();
+		mousey = e.getY();
+		double xdif = mousex - (player.xpos + player.width/2);
+		double ydif = mousey - (player.ypos + player.height/2);
+		player.angle = Math.atan2(ydif,xdif);
+		slash.angle = Math.toDegrees(player.angle);
+		if(slash.isattacking == false)
+		{
+			slash.millitime = System.currentTimeMillis();
+		}
+
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+
 	}
 }
