@@ -51,7 +51,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 
 	public BufferStrategy bufferStrategy;
 	public Image TerrarianPic;
+	public Image Bosspic;
 	public Image swordpic;
+	public Image Bossbarpic;
 	public EyeofCthulu boss;
 	public boolean islanding;
 	public Walls arena[];
@@ -92,7 +94,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		{
 			arena[j] = new Walls(0, j*125, 1000, 30);
 		}
-
+		Bosspic = Toolkit.getDefaultToolkit().getImage("EyePhase1.png");
+		Bossbarpic = Toolkit.getDefaultToolkit().getImage("Bossbar.png");
 
 	}// BasicGameApp()
 
@@ -214,20 +217,18 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		{
 			player.isdamaged = false;
 		}
-		if(!player.hitbox.intersects(boss.hitbox))
-		{
-			player.isdamaged = false;
-		}
-		if(System.currentTimeMillis() - player.iframes > 1000)
+		if(System.currentTimeMillis() - player.iframes > 670)
 		{
 			player.isdamaged = false;
 		}
 		if(player.hitbox.intersects(boss.hitbox) && player.isdamaged == false)
 		{
 			player.isdamaged = true;
+			player.damagenumber = System.currentTimeMillis();
 			player.health = player.health-boss.strenth;
 			System.out.println(player.health);
 			player.iframes = System.currentTimeMillis();
+			boss.isfollowing = false;
 		}
 
 	}
@@ -281,12 +282,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
 		g.clearRect(0, 0, WIDTH, HEIGHT);
 		g.drawImage(TerrarianPic, (int)player.xpos, (int)player.ypos, (int) player.width, (int)player.height, null );
-		g.drawImage(TerrarianPic, (int)boss.xpos, (int)boss.ypos, (int) boss.width, (int)boss.height, null );
-
-
-
-
-		//g.drawImage(, (int)player.xpos, (int)player.ypos, player.width, player.height, null);
+		g.drawImage(Bosspic, (int)boss.xpos, (int)boss.ypos, (int) boss.width, (int)boss.height, null );
 		g.drawRect(floor.hitbox.x, floor.hitbox.y, floor.hitbox.width, floor.hitbox.height);
 		g.drawRect(player.hitbox.x, player.hitbox.y, player.hitbox.width, player.hitbox.height);
 		g.drawRect(slash.hitbox.x,slash.hitbox.y,slash.hitbox.width,slash.hitbox.height);
@@ -294,6 +290,11 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		{
 			g.fillRect(arena[j].hitbox.x, arena[j].hitbox.y, arena[j].hitbox.width, 5 );
 		}
+		if(boss.isAlive == true)
+		{
+			g.drawImage(Bossbarpic, 200, 550, 600, 65, null );
+		}
+
 
 
 
@@ -319,6 +320,13 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		if(e.getKeyCode() == 65 && player.dx>-10)
 		{
 			left = true;
+			if(System.currentTimeMillis()- player.dash<350 && System.currentTimeMillis()- player.dashcooldown >1000)
+			{
+				player.dx = -15;
+				player.iframes = System.currentTimeMillis();
+				player.dashcooldown = System.currentTimeMillis();
+			}
+			player.dash = System.currentTimeMillis();
 
 		}
 		if(e.getKeyCode() == 32)
@@ -332,6 +340,14 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		if(e.getKeyCode() == 68 && player.dx<10)
 		{
 			right = true;
+			if(System.currentTimeMillis()- player.dash<350 && System.currentTimeMillis()- player.dashcooldown >1000)
+			{
+				player.dx = 15;
+				player.iframes = System.currentTimeMillis();
+				player.dashcooldown = System.currentTimeMillis();
+			}
+			player.dash = System.currentTimeMillis();
+
 		}
 		if(e.getKeyCode() == 83)
 		{player.ispassing = true;}
@@ -344,13 +360,14 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 	{
 		if(e.getKeyCode() == 68)
 		{
+
 			right = false;
-			player.dx = 0;
+			//		player.dx = 0;
 		}
 		if(e.getKeyCode() == 65)
 		{
 			left = false;
-			player.dx = 0;
+		//	player.dx = 0;
 		}
 		if(e.getKeyCode() == 83)
 		{player.ispassing = false;

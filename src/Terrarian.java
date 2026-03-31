@@ -24,6 +24,9 @@ public class Terrarian {
     public boolean ispassing;
     public boolean isdamaged;
     public long iframes;
+    public long damagenumber;
+    public long dash;
+    public long dashcooldown;
 
 
 

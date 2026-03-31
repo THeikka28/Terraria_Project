@@ -25,6 +25,7 @@ public class EyeofCthulu {
     public int startinghealth;
     boolean isdamaged;
     boolean isphase1;
+    public boolean isfollowing;
 
 
 
@@ -39,8 +40,8 @@ public class EyeofCthulu {
         ypos = pYpos;
         dx =2;
         dy =2;
-        width = 150;
-        height = 150;
+        width = 250;
+        height = 230;
         isAlive = true;
         hitbox = new Rectangle((int)xpos, (int)ypos, (int)width, (int)height);
         angle = 45.467;
@@ -72,17 +73,44 @@ public class EyeofCthulu {
     public void stalk(double x,double y)
     {
 
-                scale = speed / Math.sqrt(((x - xpos) * (x - xpos)) + ((y - ypos) * (y - ypos)));
-                dy = (y - ypos) * scale;
-                dx = (x - xpos) * scale;
-
+        if(isfollowing == true) {
+            scale = speed / Math.sqrt(((x - xpos) * (x - xpos)) + ((y - ypos) * (y - ypos)));
+            dy = (y - ypos) * scale;
+            dx = (x - xpos) * scale;
+        }
+        if(isfollowing == false)
+        {
+           dx = (Math.random()*10+5);
+           dy = -(Math.random()*7+7);
+            if(xpos>1000)
+            {
+                isfollowing = true;
+            }
+            if(xpos<0)
+            {
+                isfollowing = true;
+            }
+            if(ypos>700)
+            {
+                isfollowing = true;
+            }
+            if(ypos<0)
+            {
+                isfollowing = true;
+            }        }
     }
     public void dash()
     {
-        if (health > 300)
+
+        if (health > 300 && health<1000)
         {
-            speed = 8000 / (health);
+            speed = 10000 / (health);
         }
+        else
+        {
+            speed = 10;
+        }
+
         if(xpos>1000)
         {
             isturning = true;
