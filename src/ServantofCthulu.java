@@ -3,7 +3,7 @@ import java.awt.*;
 /**
  * Created by chales on 11/6/2017.
  */
-public class EyeofCthulu {
+public class ServantofCthulu {
 
     //VARIABLE DECLARATION SECTION
     //Here's where you state which variables you are going to use.
@@ -35,17 +35,17 @@ public class EyeofCthulu {
     // A constructor builds the object when called and sets variable values.
     //This is a SECOND constructor that takes 3 parameters.  This allows us to specify the hero's name and position when we build it.
     // if you put in a String, an int and an int the program will use this constructor instead of the one above.
-    public EyeofCthulu(int pXpos, int pYpos) {
+    public ServantofCthulu(int pXpos, int pYpos) {
         xpos = pXpos;
         ypos = pYpos;
         dx =2;
         dy =2;
-        width = 200;
-        height = 150;
+        width = 250;
+        height = 230;
         isAlive = true;
         hitbox = new Rectangle((int)xpos, (int)ypos, (int)width, (int)height);
         angle = 45.467;
-        speed = 7;
+        speed = 4;
         health = 3000;
         startinghealth = health;
         strenth = (Math.random()*10)+10;
@@ -55,7 +55,7 @@ public class EyeofCthulu {
 
     //The move method.  Everytime this is run (or "called") the hero's x position and y position change by dx and dy
     public void move() {
-        strenth = (Math.random()*10)+10;
+        strenth = (Math.random()*5)+2;
         if(health>1600)
         {
             isphase1 =true;
@@ -72,22 +72,33 @@ public class EyeofCthulu {
     }
     public void stalk(double x,double y)
     {
-/*
-Alternates between trying to stay above the player and summoning Servants of Cthulhu, and charging at the player occasionally. Spins when at low health, and begins exclusively charging at the player. Always looks at player.
- */
 
+        if(isfollowing == true) {
             scale = speed / Math.sqrt(((x - xpos) * (x - xpos)) + ((y - ypos) * (y - ypos)));
             dy = (y - ypos) * scale;
             dx = (x - xpos) * scale;
-
-
-            if(xpos>x-10 && xpos<x+10 && ypos>y-10 && ypos<y+10)
+        }
+        if(isfollowing == false)
+        {
+           dx = (Math.random()*10+5);
+           dy = -(Math.random()*7+7);
+            if(xpos>1000)
             {
-                    isfollowing = true;
-                System.out.println("teru");
+                isfollowing = true;
             }
+            if(xpos<0)
+            {
+                isfollowing = true;
+            }
+            if(ypos>700)
+            {
+                isfollowing = true;
+            }
+            if(ypos<0)
+            {
+                isfollowing = true;
+            }        }
     }
-
     public void dash()
     {
 

@@ -159,8 +159,12 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		}
 		if(boss.isphase1 == true)
 		{
-
-			boss.stalk(player.xpos, player.ypos);
+			if(boss.isfollowing == true) {
+				boss.stalk(player.xpos, player.ypos);
+			}
+			if(boss.isfollowing == false) {
+				boss.stalk(player.xpos, player.ypos+(Math.random()*-50)-350);
+			}
 		}
 		boss.move();
 
@@ -186,6 +190,22 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 					player.isgrounded = true;
 					player.ypos = 600 - player.height;
 				}
+			}
+			if(player.dx > 0.7)
+			{
+				player.dx = player.dx-0.1;
+			}
+			if(player.dx < -0.7)
+			{
+				player.dx = player.dx+0.1;
+			}
+			if(player.dx >= -0.7)
+			{
+				player.dx = 0;
+			}
+			if(player.dx <=0.7)
+			{
+				player.dx = 0;
 			}
 		}
 		if(!player.hitbox.intersects(floor.hitbox))
@@ -286,6 +306,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		g.drawRect(floor.hitbox.x, floor.hitbox.y, floor.hitbox.width, floor.hitbox.height);
 		g.drawRect(player.hitbox.x, player.hitbox.y, player.hitbox.width, player.hitbox.height);
 		g.drawRect(slash.hitbox.x,slash.hitbox.y,slash.hitbox.width,slash.hitbox.height);
+		g.drawRect(boss.hitbox.x,boss.hitbox.y, boss.hitbox.width, boss.hitbox.height);
 		for(int j =0; j<arena.length; j++)
 		{
 			g.fillRect(arena[j].hitbox.x, arena[j].hitbox.y, arena[j].hitbox.width, 5 );
