@@ -162,8 +162,13 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			if(boss.isfollowing == true) {
 				boss.stalk(player.xpos, player.ypos);
 			}
-			if(boss.isfollowing == false) {
+			if(boss.isfollowing == false && boss.isdashing == false) {
 				boss.stalk(player.xpos, player.ypos+(Math.random()*-50)-350);
+
+			}
+			if(boss.isdashing == true){
+				boss.dash();
+
 			}
 		}
 		boss.move();
@@ -190,22 +195,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 					player.isgrounded = true;
 					player.ypos = 600 - player.height;
 				}
-			}
-			if(player.dx > 0.7)
-			{
-				player.dx = player.dx-0.1;
-			}
-			if(player.dx < -0.7)
-			{
-				player.dx = player.dx+0.1;
-			}
-			if(player.dx >= -0.7)
-			{
-				player.dx = 0;
-			}
-			if(player.dx <=0.7)
-			{
-				player.dx = 0;
 			}
 		}
 		if(!player.hitbox.intersects(floor.hitbox))

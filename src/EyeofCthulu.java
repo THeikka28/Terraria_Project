@@ -26,6 +26,9 @@ public class EyeofCthulu {
     boolean isdamaged;
     boolean isphase1;
     public boolean isfollowing;
+    public long hidetime;
+    public boolean isspawning;
+    public boolean isdashing;
 
 
 
@@ -45,7 +48,7 @@ public class EyeofCthulu {
         isAlive = true;
         hitbox = new Rectangle((int)xpos, (int)ypos, (int)width, (int)height);
         angle = 45.467;
-        speed = 7;
+        speed = 5;
         health = 3000;
         startinghealth = health;
         strenth = (Math.random()*10)+10;
@@ -69,28 +72,67 @@ public class EyeofCthulu {
         hitbox = new Rectangle((int)xpos, (int)ypos, (int)width, (int)height);
         xpos = xpos + dx;
         ypos = ypos + dy;
+
     }
     public void stalk(double x,double y)
     {
 /*
 Alternates between trying to stay above the player and summoning Servants of Cthulhu, and charging at the player occasionally. Spins when at low health, and begins exclusively charging at the player. Always looks at player.
  */
-
             scale = speed / Math.sqrt(((x - xpos) * (x - xpos)) + ((y - ypos) * (y - ypos)));
             dy = (y - ypos) * scale;
             dx = (x - xpos) * scale;
-
-
             if(xpos>x-10 && xpos<x+10 && ypos>y-10 && ypos<y+10)
             {
-                    isfollowing = true;
-                System.out.println("teru");
+                System.out.println("spawn");
+
             }
+            if(System.currentTimeMillis()-hidetime>(Math.random()*1000)+3000)
+            {
+            int rand = (int)(Math.random()*3)+1;
+                hidetime = System.currentTimeMillis();
+                if(rand ==1)
+                {
+                    isfollowing = true;
+                    isdashing = false;
+                }
+                if(rand ==2)
+                {
+                    isdashing = true;
+                    isfollowing = false;
+                }
+                if(rand ==3)
+                {
+                    isdashing = false;
+                    isfollowing = false;
+                }
+            }
+
+
     }
 
     public void dash()
     {
-
+        if(System.currentTimeMillis()-hidetime>(Math.random()*1000)+3000)
+        {
+            int rand = (int)(Math.random()*3)+1;
+            hidetime = System.currentTimeMillis();
+            if(rand ==1)
+            {
+                isfollowing = true;
+                isdashing = false;
+            }
+            if(rand ==2)
+            {
+                isdashing = true;
+                isfollowing = false;
+            }
+            if(rand ==3)
+            {
+                isdashing = false;
+                isfollowing = false;
+            }
+        }
         if (health > 300 && health<1000)
         {
             speed = 10000 / (health);
