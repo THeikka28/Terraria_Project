@@ -72,10 +72,10 @@ public class EyeofCthulu {
         hitbox = new Rectangle((int)xpos, (int)ypos, (int)width, (int)height);
         xpos = xpos + dx;
         ypos = ypos + dy;
-
     }
     public void stalk(double x,double y)
     {
+        speed = 7;
 /*
 Alternates between trying to stay above the player and summoning Servants of Cthulhu, and charging at the player occasionally. Spins when at low health, and begins exclusively charging at the player. Always looks at player.
  */
@@ -84,13 +84,14 @@ Alternates between trying to stay above the player and summoning Servants of Cth
             dx = (x - xpos) * scale;
             if(xpos>x-10 && xpos<x+10 && ypos>y-10 && ypos<y+10)
             {
-                System.out.println("spawn");
+             //   System.out.println("spawn
 
             }
-            if(System.currentTimeMillis()-hidetime>(Math.random()*1000)+3000)
+            if(System.currentTimeMillis()-hidetime>(Math.random()*1000)+5000)
             {
             int rand = (int)(Math.random()*3)+1;
                 hidetime = System.currentTimeMillis();
+                System.out.println(rand);
                 if(rand ==1)
                 {
                     isfollowing = true;
@@ -113,7 +114,7 @@ Alternates between trying to stay above the player and summoning Servants of Cth
 
     public void dash()
     {
-        if(System.currentTimeMillis()-hidetime>(Math.random()*1000)+3000)
+        if(System.currentTimeMillis()-hidetime>(Math.random()*1000)+5000)
         {
             int rand = (int)(Math.random()*3)+1;
             hidetime = System.currentTimeMillis();
@@ -133,13 +134,21 @@ Alternates between trying to stay above the player and summoning Servants of Cth
                 isfollowing = false;
             }
         }
-        if (health > 300 && health<1000)
+        if (health >1000)
+        {
+            speed = 15;
+        }
+        if (health >= 400 && health<=1000)
         {
             speed = 10000 / (health);
         }
+        else if(health<=300)
+        {
+            speed = 10000/300;
+        }
         else
         {
-            speed = 10;
+            speed = 7;
         }
 
         if(xpos>1000)

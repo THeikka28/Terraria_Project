@@ -133,7 +133,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		{
 			player.dx = player.dx-1;
 		}
-
 			if(slash.isattacking == false)
 			{
 				slash.hitbox = new Rectangle((int) player.xpos+3, (int) player.ypos+3,  1, 1);
@@ -164,15 +163,13 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			}
 			if(boss.isfollowing == false && boss.isdashing == false) {
 				boss.stalk(player.xpos, player.ypos+(Math.random()*-50)-350);
-
 			}
-			if(boss.isdashing == true){
+			if(boss.isdashing == true)
+			{
 				boss.dash();
-
 			}
 		}
 		boss.move();
-
 	}
 
 
@@ -184,6 +181,18 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		}
 		if(player.hitbox.intersects(floor.hitbox))
 		{
+			if(player.dx >= 1)
+			{
+				player.dx = player.dx-0.5;
+			}
+			if(player.dx <= -1)
+			{
+				player.dx = player.dx+0.5;
+			}
+			if(player.dx > -1 && player.dx<1 && right == false && left == false)
+			{
+				player.dx = 0;
+			}
 			if(islanding == false && player.ispassing == false )
 			{
 				player.isgrounded = true;
@@ -200,6 +209,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		if(!player.hitbox.intersects(floor.hitbox))
 		{
 			islanding = false;
+
 		}
 		if (!player.hitbox.intersects(floor.hitbox))
 		{
@@ -207,14 +217,25 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		}
 		for(int x=0; x<arena.length; x++){
 		if (player.hitbox.intersects(arena[x].hitbox) && player.ypos < (arena[x].ypos-90))
-		{
-			if(!player.ispassing) {
+			{
+				if(player.dx >= 1)
+				{
+					player.dx = player.dx-0.5;
+				}
+				if(player.dx <= -1)
+				{
+					player.dx = player.dx+0.5;
+				}
+				if(player.dx > -1 && player.dx<1 && right == false && left == false)
+				{
+					player.dx = 0;
+				}
+			if(!player.ispassing)
+				{
 				player.isgrounded = true;
 				player.ypos = arena[x].ypos - player.height;
+				}
 			}
-
-
-		}
 		}
 		if(slash.hitbox.intersects(boss.hitbox) && boss.isdamaged == false)
 		{
@@ -237,9 +258,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			player.health = player.health-boss.strenth;
 			System.out.println(player.health);
 			player.iframes = System.currentTimeMillis();
-			boss.isfollowing = false;
 		}
-
 	}
 	
    //Pauses or sleeps the computer for the amount specified in milliseconds
