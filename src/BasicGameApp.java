@@ -57,6 +57,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 	public EyeofCthulu boss;
 	public boolean islanding;
 	public Walls arena[];
+	public ServantofCthulu servants[];
 
 
    //Declare the objects used in the program
@@ -89,15 +90,20 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		floor = new Walls(0,600,1000,200);
 		boss = new EyeofCthulu(100,100);
 		arena = new Walls[6];
+		servants = new ServantofCthulu[(int)(Math.random()*10+5)];
 		floor.ispassable = false;
 		for(int j = 0; j<arena.length; j++)
 		{
 			arena[j] = new Walls(0, j*125, 1000, 30);
 		}
+		for(int j = 0; j<servants.length; j++)
+		{
+			servants[j] = new ServantofCthulu(-100, -100);
+		}
 		Bosspic = Toolkit.getDefaultToolkit().getImage("EyePhase1.png");
 		Bossbarpic = Toolkit.getDefaultToolkit().getImage("Bossbar.png");
 
-	}// BasicGameApp()
+	}
 
    
 //*******************************************************************************
@@ -122,6 +128,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 
 	public void moveThings()
 	{
+
       //calls the move( ) code in the objects
 		player.move();
 		if (right == true && player.dx <10)
@@ -170,6 +177,12 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			}
 		}
 		boss.move();
+		for(int x =1; x< servants.length; x++) {
+			if (servants[x].isAlive)
+			{
+				servants[x].move(player.xpos, player.ypos);
+			}
+		}
 	}
 
 
@@ -323,10 +336,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		{
 			g.drawImage(Bossbarpic, 200, 550, 600, 65, null );
 		}
-
-
-
-
+		for(int k = 1; k< servants.length; k++)
+		{g.drawImage(Bosspic,(int)servants[k].xpos, (int)servants[k].ypos, (int)servants[k].width, (int)servants[k].height, null );}
 		g.dispose();
 
 		bufferStrategy.show();
@@ -349,9 +360,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		if(e.getKeyCode() == 65 && player.dx>-10)
 		{
 			left = true;
-			if(System.currentTimeMillis()- player.dash<350 && System.currentTimeMillis()- player.dashcooldown >1000)
+			if(System.currentTimeMillis()- player.dash<350 && System.currentTimeMillis()- player.dashcooldown >1500)
 			{
-				player.dx = -15;
+				player.dx = -20;
 				player.iframes = System.currentTimeMillis();
 				player.dashcooldown = System.currentTimeMillis();
 			}
@@ -369,9 +380,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		if(e.getKeyCode() == 68 && player.dx<10)
 		{
 			right = true;
-			if(System.currentTimeMillis()- player.dash<350 && System.currentTimeMillis()- player.dashcooldown >1000)
+			if(System.currentTimeMillis()- player.dash<350 && System.currentTimeMillis()- player.dashcooldown >1500)
 			{
-				player.dx = 15;
+				player.dx = 20;
 				player.iframes = System.currentTimeMillis();
 				player.dashcooldown = System.currentTimeMillis();
 			}
@@ -391,12 +402,10 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		{
 
 			right = false;
-			//		player.dx = 0;
 		}
 		if(e.getKeyCode() == 65)
 		{
 			left = false;
-		//	player.dx = 0;
 		}
 		if(e.getKeyCode() == 83)
 		{player.ispassing = false;

@@ -23,8 +23,6 @@ public class ServantofCthulu {
     public int health;
     public double strenth;
     public int startinghealth;
-    boolean isdamaged;
-    boolean isphase1;
     public boolean isfollowing;
 
 
@@ -40,13 +38,13 @@ public class ServantofCthulu {
         ypos = pYpos;
         dx =2;
         dy =2;
-        width = 250;
-        height = 230;
+        width = 40;
+        height = 32;
         isAlive = true;
         hitbox = new Rectangle((int)xpos, (int)ypos, (int)width, (int)height);
         angle = 45.467;
         speed = 4;
-        health = 3000;
+        health = 8;
         startinghealth = health;
         strenth = (Math.random()*10)+10;
 
@@ -54,21 +52,12 @@ public class ServantofCthulu {
 
 
     //The move method.  Everytime this is run (or "called") the hero's x position and y position change by dx and dy
-    public void move() {
+    public void move(double pxpos, double pypos) {
         strenth = (Math.random()*5)+2;
-        if(health>1600)
-        {
-            isphase1 =true;
-        }
-        else {isphase1 = false;}
-
-        if(health<=1600)
-        {
-            dash();
-        }
         hitbox = new Rectangle((int)xpos, (int)ypos, (int)width, (int)height);
         xpos = xpos + dx;
         ypos = ypos + dy;
+        stalk(pxpos, pypos);
     }
     public void stalk(double x,double y)
     {
@@ -99,38 +88,7 @@ public class ServantofCthulu {
                 isfollowing = true;
             }        }
     }
-    public void dash()
-    {
 
-        if (health > 300 && health<1000)
-        {
-            speed = 10000 / (health);
-        }
-        else
-        {
-            speed = 10;
-        }
-
-        if(xpos>1000)
-        {
-            isturning = true;
-        }
-        if(xpos<0)
-        {
-            isturning = true;
-        }
-        if(ypos>700)
-        {
-            isturning = true;
-        }
-        if(ypos<0)
-        {
-            isturning = true;
-        }
-        if(xpos<1000 && xpos>0&&ypos<700 && ypos>0)
-        {
-            isturning = false;
-        }
     }
-}
+
 

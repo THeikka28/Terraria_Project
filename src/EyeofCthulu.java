@@ -84,8 +84,7 @@ Alternates between trying to stay above the player and summoning Servants of Cth
             dx = (x - xpos) * scale;
             if(xpos>x-10 && xpos<x+10 && ypos>y-10 && ypos<y+10)
             {
-             //   System.out.println("spawn
-
+                isspawning = true;
             }
             if(System.currentTimeMillis()-hidetime>(Math.random()*1000)+5000)
             {
