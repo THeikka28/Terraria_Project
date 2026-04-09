@@ -58,9 +58,12 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 	public boolean islanding;
 	public Walls arena[];
 	public ServantofCthulu servants[];
+	public Image Deathscreen;
+	public Image slice;
 
 
-   //Declare the objects used in the program
+
+	//Declare the objects used in the program
    //These are things that are made up of more than one variable type
 	public Terrarian player;
 	public Walls floor;
@@ -102,6 +105,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		}
 		Bosspic = Toolkit.getDefaultToolkit().getImage("EyePhase1.png");
 		Bossbarpic = Toolkit.getDefaultToolkit().getImage("Bossbar.png");
+		Deathscreen = Toolkit.getDefaultToolkit().getImage("Death.png"); //load the picture
+
 
 	}
 
@@ -147,10 +152,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			slash.xpos = (player.xpos+(player.width/2));
 			slash.ypos = (player.ypos+(player.height/2));
 			slash.attack();
-			if(slash.isattacking == true)
-			{
-				slash.drawangle = slash.drawangle+0.1;
-			}
 		if(player.dx >0) {
 			TerrarianPic = Toolkit.getDefaultToolkit().getImage("Terrarianpic.png"); //load the picture
 		}
@@ -327,6 +328,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		g.drawRect(floor.hitbox.x, floor.hitbox.y, floor.hitbox.width, floor.hitbox.height);
 		g.drawRect(player.hitbox.x, player.hitbox.y, player.hitbox.width, player.hitbox.height);
 		g.drawRect(slash.hitbox.x,slash.hitbox.y,slash.hitbox.width,slash.hitbox.height);
+		g.drawImage(slice, slash.hitbox.x,slash.hitbox.y,slash.hitbox.width,slash.hitbox.height, null);
 		g.drawRect(boss.hitbox.x,boss.hitbox.y, boss.hitbox.width, boss.hitbox.height);
 		for(int j =0; j<arena.length; j++)
 		{
@@ -336,9 +338,14 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		{
 			g.drawImage(Bossbarpic, 200, 550, 600, 65, null );
 		}
+		if(player.health < 0)
+		{
+			g.drawImage(Deathscreen, 350,350, 300, 90, null);
+		}
 		for(int k = 1; k< servants.length; k++)
 		{g.drawImage(Bosspic,(int)servants[k].xpos, (int)servants[k].ypos, (int)servants[k].width, (int)servants[k].height, null );}
 		g.dispose();
+
 
 		bufferStrategy.show();
 	}

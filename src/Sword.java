@@ -20,7 +20,7 @@ public class Sword {
     double drawangle;
     long millitime;
     boolean isattacking;
-    public boolean isanimating;
+    public boolean up, down, left, right;
 
 
 
@@ -60,30 +60,31 @@ public class Sword {
             if(isattacking == true && angle >-45 && angle <45)
             {
                 hitbox = new Rectangle((int) xpos+30, (int) ypos-60, (int) width+20, (int) height+60);
-                drawangle = -45;
+
+
+
             }
             if(isattacking == true && angle <-45 && angle >-135)
             {
             hitbox = new Rectangle((int) xpos-60, (int) ypos-130, (int) width+60, (int) height+20);
-            drawangle = -135;
+
 
             }
             if(isattacking == true && angle <-135)
             {
             hitbox = new Rectangle((int) xpos-110, (int) ypos-60, (int) width+20, (int) height+60);
-            drawangle = 135;
+
 
             }
             if(isattacking == true && angle >135)
             {
-            hitbox = new Rectangle((int) xpos-110, (int) ypos-60, (int) width+20, (int) height+60);
-            drawangle = 135;
+
 
             }
             if(isattacking == true && angle <135 && angle >45)
             {
             hitbox = new Rectangle((int) xpos-60, (int) ypos+50, (int) width+60, (int) height+20);
-            drawangle = 45;
+
             }
 
 

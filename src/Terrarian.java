@@ -4,7 +4,7 @@ import java.awt.geom.Rectangle2D;
 /**
  * Created by chales on 11/6/2017.
  */
-public class Terrarian {
+public class    Terrarian {
 
     //VARIABLE DECLARATION SECTION
     //Here's where you state which variables you are going to use.
