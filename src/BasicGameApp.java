@@ -59,7 +59,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 	public Walls arena[];
 	public ServantofCthulu servants[];
 	public Image Deathscreen;
-	public Image slice;
 
 
 
@@ -133,6 +132,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 
 	public void moveThings()
 	{
+
 
       //calls the move( ) code in the objects
 		player.move();
@@ -328,7 +328,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		g.drawRect(floor.hitbox.x, floor.hitbox.y, floor.hitbox.width, floor.hitbox.height);
 		g.drawRect(player.hitbox.x, player.hitbox.y, player.hitbox.width, player.hitbox.height);
 		g.drawRect(slash.hitbox.x,slash.hitbox.y,slash.hitbox.width,slash.hitbox.height);
-		g.drawImage(slice, slash.hitbox.x,slash.hitbox.y,slash.hitbox.width,slash.hitbox.height, null);
+		g.drawImage(slash.slice, slash.hitbox.x,slash.hitbox.y,slash.hitbox.width,slash.hitbox.height, null);
 		g.drawRect(boss.hitbox.x,boss.hitbox.y, boss.hitbox.width, boss.hitbox.height);
 		for(int j =0; j<arena.length; j++)
 		{
