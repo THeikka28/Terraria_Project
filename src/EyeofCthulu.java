@@ -29,6 +29,7 @@ public class EyeofCthulu {
     public long hidetime;
     public boolean isspawning;
     public boolean isdashing;
+    public double px, py;
 
 
 
@@ -52,7 +53,6 @@ public class EyeofCthulu {
         health = 3000;
         startinghealth = health;
         strenth = (Math.random()*10)+10;
-
     } // constructor
 
 
@@ -73,39 +73,39 @@ public class EyeofCthulu {
         xpos = xpos + dx;
         ypos = ypos + dy;
     }
-    public void stalk(double x,double y)
-    {
+    public void stalk(double x,double y) {
         speed = 7;
 /*
 Alternates between trying to stay above the player and summoning Servants of Cthulhu, and charging at the player occasionally. Spins when at low health, and begins exclusively charging at the player. Always looks at player.
  */
-            scale = speed / Math.sqrt(((x - xpos) * (x - xpos)) + ((y - ypos) * (y - ypos)));
-            dy = (y - ypos) * scale;
-            dx = (x - xpos) * scale;
-            if(xpos>x-10 && xpos<x+10 && ypos>y-10 && ypos<y+10)
-            {
-                isspawning = true;
-            }
+        px = x; py = y;
+        scale = speed / Math.sqrt(((x - xpos) * (x - xpos)) + ((y - ypos) * (y - ypos)));
+        dy = (y - ypos) * scale;
+        dx = (x - xpos) * scale;
+        if (xpos < x - 10 && xpos > x + 10 && ypos < y - 10 && ypos > y + 10) {
+            isspawning = false;
+        }
             if(System.currentTimeMillis()-hidetime>(Math.random()*1000)+5000)
             {
-            int rand = (int)(Math.random()*3)+1;
+            int rand = (int)(Math.random()*5)+1;
                 hidetime = System.currentTimeMillis();
                 System.out.println(rand);
-                if(rand ==1)
+                if(rand <3)
                 {
                     isfollowing = true;
                     isdashing = false;
                 }
-                if(rand ==2)
+                if(rand >=3 && rand <=4)
                 {
                     isdashing = true;
                     isfollowing = false;
                 }
-                if(rand ==3)
+                if(rand ==5)
                 {
                     isdashing = false;
                     isfollowing = false;
                 }
+
             }
 
 

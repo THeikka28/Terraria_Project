@@ -16,7 +16,7 @@ public class ServantofCthulu {
     public double height;
     public boolean isAlive;
     public Rectangle hitbox;
-    public boolean isturning;
+    public boolean isdamaged;
     public double angle;
     public double speed;
     public double scale;
@@ -58,6 +58,11 @@ public class ServantofCthulu {
         xpos = xpos + dx;
         ypos = ypos + dy;
         stalk(pxpos, pypos);
+        if (health < 0)
+        {
+            isAlive = false;
+        }
+
     }
     public void stalk(double x,double y)
     {

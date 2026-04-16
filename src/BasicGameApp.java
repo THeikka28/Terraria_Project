@@ -92,7 +92,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		floor = new Walls(0,600,1000,200);
 		boss = new EyeofCthulu(100,100);
 		arena = new Walls[6];
-		servants = new ServantofCthulu[(int)(Math.random()*10+5)];
+		servants = new ServantofCthulu[5];
 		floor.ispassable = false;
 		for(int j = 0; j<arena.length; j++)
 		{
@@ -100,7 +100,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		}
 		for(int j = 0; j<servants.length; j++)
 		{
-			servants[j] = new ServantofCthulu(-100, -100);
+			servants[j] = new ServantofCthulu(-100 + (int)(Math.random()*250), -100 + (int)(Math.random()*300));
+			servants[j].speed = (Math.random()*6+1);
 		}
 		Bosspic = Toolkit.getDefaultToolkit().getImage("EyePhase1.png");
 		Bossbarpic = Toolkit.getDefaultToolkit().getImage("Bossbar.png");
@@ -171,7 +172,29 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			}
 			if(boss.isfollowing == false && boss.isdashing == false) {
 				boss.stalk(player.xpos, player.ypos+(Math.random()*-50)-350);
+				if(  boss.xpos > boss.px - 10 && boss.xpos < boss.px + 10 && boss.ypos > boss.py - 10 && boss.ypos < boss.py + 10 && boss.isspawning == false)
+				{
+					boss.isspawning = true;
+					for(int h = 0; h< servants.length; h++)
+					{
+						servants[h].health = 8;
+						servants[h].isAlive = true;
+						servants[h].xpos = boss.xpos+ ((int)(Math.random()*250)-125);
+						servants[h].ypos = boss.ypos+ ((int)(Math.random()*150)-75);
+
+					}
+				}
 			}
+			/*if(boss.isspawning == true)
+			{
+				int rand = (int)(Math.random()*2)+1;
+				if (rand == 1){boss.isfollowing = true;}
+				if (rand == 1){boss.isdashing = true;}
+
+
+			}
+
+			 */
 			if(boss.isdashing == true)
 			{
 				boss.dash();
@@ -255,7 +278,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		{
 			boss.isdamaged = true;
 			boss.health = boss.health-player.strength;
-			System.out.println(boss.health);
 		}
 		if(!player.hitbox.intersects(boss.hitbox))
 		{
@@ -270,8 +292,33 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			player.isdamaged = true;
 			player.damagenumber = System.currentTimeMillis();
 			player.health = player.health-boss.strenth;
-			System.out.println(player.health);
 			player.iframes = System.currentTimeMillis();
+		}
+		for (int o = 1; o< servants.length; o++)
+		{
+			if (servants[o].hitbox.intersects(player.hitbox) && player.isdamaged == false)
+			{
+				player.isdamaged = true;
+				player.damagenumber = System.currentTimeMillis();
+				player.health = player.health-servants[o].strenth;
+				player.iframes = System.currentTimeMillis();
+			}
+		}
+		for (int o = 1; o< servants.length; o++)
+		{
+			if (servants[o].hitbox.intersects(slash.hitbox) && servants[o].isdamaged == false)
+			{
+				servants[o].isdamaged = true;
+				servants[o].health = servants[o].health-player.strength;
+				System.out.println("Servant " + o + " was damaged");
+			}
+		}
+		for (int o = 1; o< servants.length; o++)
+		{
+			if (!servants[o].hitbox.intersects(slash.hitbox))
+			{
+				servants[o].isdamaged = false;
+			}
 		}
 	}
 	
