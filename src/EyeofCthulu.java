@@ -72,6 +72,7 @@ public class EyeofCthulu {
         hitbox = new Rectangle((int)xpos, (int)ypos, (int)width, (int)height);
         xpos = xpos + dx;
         ypos = ypos + dy;
+        if(health<=0){isAlive = false;}
     }
     public void stalk(double x,double y) {
         speed = 7;

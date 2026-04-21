@@ -16,6 +16,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.text.StyledEditorKit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -58,6 +59,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 	public boolean islanding;
 	public Walls arena[];
 	public ServantofCthulu servants[];
+	public heart hearts[];
 	public Image Deathscreen;
 
 
@@ -92,11 +94,21 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		floor = new Walls(0,600,1000,200);
 		boss = new EyeofCthulu(100,100);
 		arena = new Walls[6];
+		hearts = new heart[21];
 		servants = new ServantofCthulu[5];
 		floor.ispassable = false;
 		for(int j = 0; j<arena.length; j++)
 		{
 			arena[j] = new Walls(0, j*125, 1000, 30);
+		}
+		for(int i = 0; i< hearts.length; i++)
+		{
+			if(i<11) {
+				hearts[i] = new heart(800+(i*20), 10);}
+			if(i>10) {
+			hearts[i] = new heart(580+(i*20), 40);}
+
+
 		}
 		for(int j = 0; j<servants.length; j++)
 		{
@@ -133,7 +145,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 
 	public void moveThings()
 	{
-
+		for(int l = 0; l< hearts.length; l++)
+		{hearts[l].injured(player.health, l*20);}
 
       //calls the move( ) code in the objects
 		player.move();
@@ -185,28 +198,23 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 					}
 				}
 			}
-			/*if(boss.isspawning == true)
-			{
-				int rand = (int)(Math.random()*2)+1;
-				if (rand == 1){boss.isfollowing = true;}
-				if (rand == 1){boss.isdashing = true;}
 
-
-			}
-
-			 */
 			if(boss.isdashing == true)
 			{
 				boss.dash();
 			}
 		}
-		boss.move();
+		if(boss.isAlive){boss.move();}
+		else{boss.xpos = 10000;}
 		for(int x =1; x< servants.length; x++) {
 			if (servants[x].isAlive)
 			{
 				servants[x].move(player.xpos, player.ypos);
 			}
+			else
+			{servants[x].xpos = 1000;}
 		}
+
 	}
 
 
@@ -391,7 +399,27 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		}
 		for(int k = 1; k< servants.length; k++)
 		{g.drawImage(Bosspic,(int)servants[k].xpos, (int)servants[k].ypos, (int)servants[k].width, (int)servants[k].height, null );}
+		if(boss.isAlive)
+		{
+			g.drawString("Eye of Cthulhu " + boss.health + "/3000", boss.hitbox.x, boss.hitbox.y);}
+
+		for(int u = 0; u<hearts.length; u++)
+		{g.drawImage(hearts[u].heart, hearts[u].xpos, hearts[u].ypos, 20,20, null);}
+
+		g.setColor(Color.lightGray);
+		g.fillRect(10, 35, 210,50 );
+		g.setColor(Color.blue);
+		double scale = (System.currentTimeMillis()- player.dashcooldown)/1500;
+		double width = 200*scale;
+		if(width<200){
+		g.fillRect(10, 40, (int) (width),40 );
+		}
+		else{	g.fillRect(15, 40, 200,40 );}
+
+		System.out.println(scale);
+
 		g.dispose();
+
 
 
 		bufferStrategy.show();
