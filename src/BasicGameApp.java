@@ -318,7 +318,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			{
 				servants[o].isdamaged = true;
 				servants[o].health = servants[o].health-player.strength;
-				System.out.println("Servant " + o + " was damaged");
 			}
 		}
 		for (int o = 1; o< servants.length; o++)
@@ -416,7 +415,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		}
 		else{	g.fillRect(15, 40, 200,40 );}
 
-		System.out.println(scale);
 
 		g.dispose();
 
@@ -434,6 +432,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
+		if(e.getKeyCode() == 72)
+		{player.heal();}
 		if(e.getKeyCode() ==69)
 		{
 			player.grapple(mousex,mousey);

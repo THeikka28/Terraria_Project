@@ -27,6 +27,7 @@ public class    Terrarian {
     public long damagenumber;
     public long dash;
     public long dashcooldown;
+    public long healtime;
 
 
 
@@ -50,6 +51,7 @@ public class    Terrarian {
         angle = 45.467;
         strength = 100;
         health = 400;
+        healtime = System.currentTimeMillis();
 
     } // constructor
 
@@ -71,5 +73,15 @@ public class    Terrarian {
         dy = (y - ypos)*scale;
         dx = (x - xpos)*scale;
 
+    }
+    public void heal()
+    {if(System.currentTimeMillis()-healtime > 30000)
+    {
+        System.out.println(health);
+        health = health+100;
+        System.out.println("healed");
+        System.out.println(health);
+        healtime = System.currentTimeMillis();
+    }
     }
 }

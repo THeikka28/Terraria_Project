@@ -62,6 +62,7 @@ public class ServantofCthulu {
         {
             isAlive = false;
         }
+        else {isAlive = true;}
 
     }
     public void stalk(double x,double y)
