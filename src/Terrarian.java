@@ -8,6 +8,7 @@ public class    Terrarian {
 
     //VARIABLE DECLARATION SECTION
     //Here's where you state which variables you are going to use.
+    public boolean cooldown;
     public String name;                //holds the name of the hero
     public double xpos;                //the x position
     public double ypos;                //the y position
@@ -82,6 +83,9 @@ public class    Terrarian {
         System.out.println("healed");
         System.out.println(health);
         healtime = System.currentTimeMillis();
+        cooldown = true;
     }
+    else{cooldown = false;}
+
     }
 }

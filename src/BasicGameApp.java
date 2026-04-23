@@ -287,10 +287,11 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			boss.isdamaged = true;
 			boss.health = boss.health-player.strength;
 		}
-		if(!player.hitbox.intersects(boss.hitbox))
-		{
-			player.isdamaged = false;
-		}
+
+			if (!player.hitbox.intersects(boss.hitbox) && !player.hitbox.intersects(servants[0].hitbox) && !player.hitbox.intersects(servants[1].hitbox) && !player.hitbox.intersects(servants[2].hitbox) && !player.hitbox.intersects(servants[3].hitbox) && !player.hitbox.intersects(servants[4].hitbox) ) {
+				player.isdamaged = false;
+			}
+
 		if(System.currentTimeMillis() - player.iframes > 670)
 		{
 			player.isdamaged = false;
@@ -398,6 +399,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		}
 		for(int k = 1; k< servants.length; k++)
 		{g.drawImage(Bosspic,(int)servants[k].xpos, (int)servants[k].ypos, (int)servants[k].width, (int)servants[k].height, null );}
+		for(int k = 1; k< servants.length; k++)
+		{g.drawRect(servants[k].hitbox.x,servants[k].hitbox.y, servants[k].hitbox.width, servants[k].hitbox.height);}
 		if(boss.isAlive)
 		{
 			g.drawString("Eye of Cthulhu " + boss.health + "/3000", boss.hitbox.x, boss.hitbox.y);}
