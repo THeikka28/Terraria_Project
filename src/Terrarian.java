@@ -21,7 +21,7 @@ public class    Terrarian {
     public boolean isgrounded;
     public double angle;
     public int strength;
-    double health;
+    int health;
     public boolean ispassing;
     public boolean isdamaged;
     public long iframes;
@@ -52,9 +52,10 @@ public class    Terrarian {
         angle = 45.467;
         strength = 100;
         health = 400;
-        healtime = System.currentTimeMillis();
+        healtime = System.currentTimeMillis()-30000;
 
     } // constructor
+
 
     //The move method.  Everytime this is run (or "called") the hero's x position and y position change by dx and dy
     public void move() {
@@ -65,6 +66,10 @@ public class    Terrarian {
         {
             dy = dy + 0.5;
         }
+
+        if(System.currentTimeMillis()-healtime < 30000)
+        {cooldown = true;}
+        else {cooldown = false;}
     }
     public void grapple(double x, double y)
     {
@@ -73,7 +78,6 @@ public class    Terrarian {
         scale = speed/Math.sqrt(((x - xpos) * (x - xpos)) + ((y - ypos) * (y - ypos)));
         dy = (y - ypos)*scale;
         dx = (x - xpos)*scale;
-
     }
     public void heal()
     {if(System.currentTimeMillis()-healtime > 30000)
@@ -83,9 +87,8 @@ public class    Terrarian {
         System.out.println("healed");
         System.out.println(health);
         healtime = System.currentTimeMillis();
-        cooldown = true;
     }
-    else{cooldown = false;}
 
-    }
+
+}
 }

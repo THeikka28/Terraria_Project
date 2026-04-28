@@ -21,7 +21,7 @@ public class ServantofCthulu {
     public double speed;
     public double scale;
     public int health;
-    public double strenth;
+    public int strenth;
     public int startinghealth;
     public boolean isfollowing;
 
@@ -40,20 +40,20 @@ public class ServantofCthulu {
         dy =2;
         width = 40;
         height = 32;
-        isAlive = true;
+        isAlive = false;
         hitbox = new Rectangle((int)xpos, (int)ypos, (int)width, (int)height);
         angle = 45.467;
         speed = 4;
         health = 8;
         startinghealth = health;
-        strenth = (Math.random()*10)+10;
+        strenth = (int)(Math.random()*10)+10;
 
     } // constructor
 
 
     //The move method.  Everytime this is run (or "called") the hero's x position and y position change by dx and dy
     public void move(double pxpos, double pypos) {
-        strenth = (Math.random()*5)+2;
+        strenth = (int)(Math.random()*5)+2;
         hitbox = new Rectangle((int)xpos, (int)ypos, (int)width, (int)height);
         xpos = xpos + dx;
         ypos = ypos + dy;

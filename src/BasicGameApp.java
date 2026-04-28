@@ -16,7 +16,6 @@ import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.text.StyledEditorKit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -49,18 +48,22 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
    public boolean left;
    int mousex = 1, mousey =1;
    public Sword slash;
+   public Image zombiepic;
 
 	public BufferStrategy bufferStrategy;
 	public Image TerrarianPic;
 	public Image Bosspic;
 	public Image swordpic;
-	public Image Bossbarpic;
 	public EyeofCthulu boss;
 	public boolean islanding;
 	public Walls arena[];
 	public ServantofCthulu servants[];
 	public heart hearts[];
 	public Image Deathscreen;
+	public Image cooldown;
+	public Image background;
+	public Zombie john;
+	public Slime slimy;
 
 
 
@@ -94,6 +97,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		floor = new Walls(0,600,1000,200);
 		boss = new EyeofCthulu(100,100);
 		arena = new Walls[6];
+		john = new Zombie(0,520);
+		slimy = new Slime(601, 101);
 		hearts = new heart[21];
 		servants = new ServantofCthulu[5];
 		floor.ispassable = false;
@@ -101,6 +106,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		{
 			arena[j] = new Walls(0, j*125, 1000, 30);
 		}
+
+
 		for(int i = 0; i< hearts.length; i++)
 		{
 			if(i<11) {
@@ -116,8 +123,10 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			servants[j].speed = (Math.random()*6+1);
 		}
 		Bosspic = Toolkit.getDefaultToolkit().getImage("EyePhase1.png");
-		Bossbarpic = Toolkit.getDefaultToolkit().getImage("Bossbar.png");
 		Deathscreen = Toolkit.getDefaultToolkit().getImage("Death.png"); //load the picture
+		cooldown = Toolkit.getDefaultToolkit().getImage("cooldown.png");
+		background = Toolkit.getDefaultToolkit().getImage("Background.jpg");
+		zombiepic = Toolkit.getDefaultToolkit().getImage("zombiepic.png");
 
 
 	}
@@ -135,8 +144,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
       //for the moment we will loop things forever.
 		while (true) {
 		crashing();
-         moveThings();  //move all the game objects
-
+         moveThings();  //move all the game objectss
          render();  // paint the graphics
          pause(20); // sleep for 10 ms
 		}
@@ -145,8 +153,13 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 
 	public void moveThings()
 	{
+
 		for(int l = 0; l< hearts.length; l++)
 		{hearts[l].injured(player.health, l*20);}
+		if(john.isAlive)
+		{john.move();}
+		if(slimy.isAlive)
+		{slimy.move();}
 
       //calls the move( ) code in the objects
 		player.move();
@@ -288,7 +301,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			boss.health = boss.health-player.strength;
 		}
 
-			if (!player.hitbox.intersects(boss.hitbox) && !player.hitbox.intersects(servants[0].hitbox) && !player.hitbox.intersects(servants[1].hitbox) && !player.hitbox.intersects(servants[2].hitbox) && !player.hitbox.intersects(servants[3].hitbox) && !player.hitbox.intersects(servants[4].hitbox) ) {
+
+			if (!player.hitbox.intersects(boss.hitbox) && !player.hitbox.intersects(john.hitbox) && !player.hitbox.intersects(slimy.hitbox)&& !player.hitbox.intersects(servants[0].hitbox) && !player.hitbox.intersects(servants[1].hitbox) && !player.hitbox.intersects(servants[2].hitbox) && !player.hitbox.intersects(servants[3].hitbox) && !player.hitbox.intersects(servants[4].hitbox) ) {
 				player.isdamaged = false;
 			}
 
@@ -296,7 +310,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		{
 			player.isdamaged = false;
 		}
-		if(player.hitbox.intersects(boss.hitbox) && player.isdamaged == false)
+		if(player.hitbox.intersects(boss.hitbox) && player.isdamaged == false && boss.isAlive)
 		{
 			player.isdamaged = true;
 			player.damagenumber = System.currentTimeMillis();
@@ -305,7 +319,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		}
 		for (int o = 1; o< servants.length; o++)
 		{
-			if (servants[o].hitbox.intersects(player.hitbox) && player.isdamaged == false)
+			if (servants[o].hitbox.intersects(player.hitbox) && player.isdamaged == false && servants[o].isAlive == true)
 			{
 				player.isdamaged = true;
 				player.damagenumber = System.currentTimeMillis();
@@ -313,6 +327,22 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 				player.iframes = System.currentTimeMillis();
 			}
 		}
+
+			if (john.hitbox.intersects(player.hitbox) && player.isdamaged == false && john.isAlive == true)
+			{
+				player.isdamaged = true;
+				player.damagenumber = System.currentTimeMillis();
+				player.health = player.health-john.strenth;
+				player.iframes = System.currentTimeMillis();
+			}
+		if (slimy.hitbox.intersects(player.hitbox) && player.isdamaged == false && slimy.isAlive == true)
+		{
+			player.isdamaged = true;
+			player.damagenumber = System.currentTimeMillis();
+			player.health = player.health-slimy.strenth;
+			player.iframes = System.currentTimeMillis();
+		}
+
 		for (int o = 1; o< servants.length; o++)
 		{
 			if (servants[o].hitbox.intersects(slash.hitbox) && servants[o].isdamaged == false)
@@ -321,6 +351,20 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 				servants[o].health = servants[o].health-player.strength;
 			}
 		}
+
+			if (john.hitbox.intersects(slash.hitbox) && john.isdamaged == false)
+			{
+				john.isdamaged = true;
+				john.health = john.health-player.strength;
+				System.out.println(john.health);
+			}
+		if (slimy.hitbox.intersects(slash.hitbox) && slimy.isdamaged == false)
+		{
+			slimy.isdamaged = true;
+			slimy.health = slimy.health-player.strength;
+			System.out.println(slimy.health);
+		}
+
 		for (int o = 1; o< servants.length; o++)
 		{
 			if (!servants[o].hitbox.intersects(slash.hitbox))
@@ -328,6 +372,16 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 				servants[o].isdamaged = false;
 			}
 		}
+
+			if (!john.hitbox.intersects(slash.hitbox))
+			{
+				john.isdamaged = false;
+			}
+		if (!slimy.hitbox.intersects(slash.hitbox))
+		{
+			slimy.isdamaged = false;
+		}
+
 	}
 	
    //Pauses or sleeps the computer for the amount specified in milliseconds
@@ -376,7 +430,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 
 	//paints things on the screen using bufferStrategy
 	private void render() {
+
 		Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
+		g.drawImage(background, 0,0,1000,700,null);
 		g.clearRect(0, 0, WIDTH, HEIGHT);
 		g.drawImage(TerrarianPic, (int)player.xpos, (int)player.ypos, (int) player.width, (int)player.height, null );
 		g.drawImage(Bosspic, (int)boss.xpos, (int)boss.ypos, (int) boss.width, (int)boss.height, null );
@@ -389,14 +445,16 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		{
 			g.fillRect(arena[j].hitbox.x, arena[j].hitbox.y, arena[j].hitbox.width, 5 );
 		}
-		if(boss.isAlive == true)
-		{
-			g.drawImage(Bossbarpic, 200, 550, 600, 65, null );
-		}
+
 		if(player.health < 0)
 		{
 			g.drawImage(Deathscreen, 350,350, 300, 90, null);
 		}
+		if(john.isAlive)
+		{
+			g.drawImage(zombiepic, john.hitbox.x,john.hitbox.y, john.hitbox.width, john.hitbox.height,null);
+			g.drawRect(john.hitbox.x, john.hitbox.y, john.hitbox.width, john.hitbox.height);}
+
 		for(int k = 1; k< servants.length; k++)
 		{g.drawImage(Bosspic,(int)servants[k].xpos, (int)servants[k].ypos, (int)servants[k].width, (int)servants[k].height, null );}
 		for(int k = 1; k< servants.length; k++)
@@ -417,8 +475,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		g.fillRect(10, 40, (int) (width),40 );
 		}
 		else{	g.fillRect(15, 40, 200,40 );}
-
-
+		if(player.cooldown == true)
+		{g.drawImage(cooldown, 10, 90, 40,45, null);}
+		g.fillRect(slimy.hitbox.x, slimy.hitbox.y, slimy.hitbox.width, slimy.hitbox.height);
 		g.dispose();
 
 
@@ -435,6 +494,16 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
+		if(e.getKeyCode() == 49) {
+			boss.isAlive = true;
+			boss.xpos = 100;
+			boss.ypos = 55;
+			for (int k = 0; k < servants.length; k++) {
+				servants[k].isAlive = true;
+				servants[k].xpos = (int) (Math.random() * 1000);
+				servants[k].ypos = (int) (Math.random() * 100);
+			}
+		}
 		if(e.getKeyCode() == 72)
 		{player.heal();}
 		if(e.getKeyCode() ==69)

@@ -21,7 +21,7 @@ public class EyeofCthulu {
     public double speed;
     public double scale;
     public int health;
-    public double strenth;
+    public int strenth;
     public int startinghealth;
     boolean isdamaged;
     boolean isphase1;
@@ -46,19 +46,19 @@ public class EyeofCthulu {
         dy =2;
         width = 200;
         height = 150;
-        isAlive = true;
+        isAlive = false;
         hitbox = new Rectangle((int)xpos, (int)ypos, (int)width, (int)height);
         angle = 45.467;
         speed = 5;
         health = 3000;
         startinghealth = health;
-        strenth = (Math.random()*10)+10;
+        strenth = (int)(Math.random()*10)+15;
     } // constructor
 
 
     //The move method.  Everytime this is run (or "called") the hero's x position and y position change by dx and dy
     public void move() {
-        strenth = (Math.random()*10)+10;
+        strenth = (int)(Math.random()*10)+15;
         if(health>1600)
         {
             isphase1 =true;
