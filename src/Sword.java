@@ -61,26 +61,26 @@ public class Sword {
             if(isattacking == true && angle >-45 && angle <45)
             {
             hitbox = new Rectangle((int) xpos+30, (int) ypos-60, (int) width+20, (int) height+60);
-            slice = Toolkit.getDefaultToolkit().getImage("right.jpeg"); //load the picture
+            slice = Toolkit.getDefaultToolkit().getImage("right.png"); //load the picture
             }
             if(isattacking == true && angle <-45 && angle >-135)
             {
             hitbox = new Rectangle((int) xpos-60, (int) ypos-130, (int) width+60, (int) height+20);
-            slice = Toolkit.getDefaultToolkit().getImage("slashup.jpeg"); //load the picture
+            slice = Toolkit.getDefaultToolkit().getImage("slashup.png"); //load the picture
             }
             if(isattacking == true && angle <-135)
             {
             hitbox = new Rectangle((int) xpos-110, (int) ypos-60, (int) width+20, (int) height+60);
-            slice = Toolkit.getDefaultToolkit().getImage("left.jpeg"); //load the picture
+            slice = Toolkit.getDefaultToolkit().getImage("Slash_copy_2.png"); //load the picture
             }
             if(isattacking == true && angle >135)
             {
                 hitbox = new Rectangle((int) xpos-110, (int) ypos-60, (int) width+20, (int) height+60);
-                slice = Toolkit.getDefaultToolkit().getImage("left.jpeg"); //load the picture
+                slice = Toolkit.getDefaultToolkit().getImage("Slash_copy_2.png"); //load the picture
             }
             if(isattacking == true && angle <135 && angle >45)
             {
-                slice = Toolkit.getDefaultToolkit().getImage("down.jpeg"); //load the picture
+                slice = Toolkit.getDefaultToolkit().getImage("down.png"); //load the picture
             hitbox = new Rectangle((int) xpos-60, (int) ypos+50, (int) width+60, (int) height+20);
 
             }

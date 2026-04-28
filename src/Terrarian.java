@@ -71,14 +71,7 @@ public class    Terrarian {
         {cooldown = true;}
         else {cooldown = false;}
     }
-    public void grapple(double x, double y)
-    {
-        double scale;
-        double speed = 15;
-        scale = speed/Math.sqrt(((x - xpos) * (x - xpos)) + ((y - ypos) * (y - ypos)));
-        dy = (y - ypos)*scale;
-        dx = (x - xpos)*scale;
-    }
+
     public void heal()
     {if(System.currentTimeMillis()-healtime > 30000)
     {
