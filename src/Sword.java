@@ -33,7 +33,7 @@ public class Sword {
 
     //This is a SECOND constructor that takes 3 parameters.  This allows us to specify the hero's name and position when we build it.
     // if you put in a String, an int and an int the program will use this constructor instead of the one above.
-    public Sword(int pXpos, int pYpos) {
+    public Sword(int pXpos, int pYpos) {//intializes the sword
         xpos = pXpos;
         ypos = pYpos;
         dx =1;
@@ -47,38 +47,38 @@ public class Sword {
     } // constructor
 
     //The move method.  Everytime this is run (or "called") the hero's x position and y position change by dx and dy
-    public void attack() {
-            if(System.currentTimeMillis()-millitime < 450)
+    public void attack() {//makes the word hitbox in the direction the mouse is from the player, ie you press above the player, and the hitbox apears on their top side
+            if(System.currentTimeMillis()-millitime < 450)//makes the sword attack last for a moment, then dissapear,
             {
                 isattacking = true;
             }
             else
-            {
+            {//when the cooldown ends, the sword's hitbox is not longer present
                 isattacking = false;
                 hitbox = new Rectangle(-200, -200, 2 , 2);
 
             }
-            if(isattacking == true && angle >-45 && angle <45)
+            if(isattacking == true && angle >-45 && angle <45)//if you attack to the right of the player the hitbox will appear there
             {
             hitbox = new Rectangle((int) xpos+30, (int) ypos-60, (int) width+20, (int) height+60);
             slice = Toolkit.getDefaultToolkit().getImage("right.png"); //load the picture
             }
-            if(isattacking == true && angle <-45 && angle >-135)
+            if(isattacking == true && angle <-45 && angle >-135)//if you attack above the player the hitbox will appear there
             {
             hitbox = new Rectangle((int) xpos-60, (int) ypos-130, (int) width+60, (int) height+20);
             slice = Toolkit.getDefaultToolkit().getImage("slashup.png"); //load the picture
             }
-            if(isattacking == true && angle <-135)
+            if(isattacking == true && angle <-135)//if you attack to the left of the player the hitbox will appear there
             {
             hitbox = new Rectangle((int) xpos-110, (int) ypos-60, (int) width+20, (int) height+60);
             slice = Toolkit.getDefaultToolkit().getImage("Slash_copy_2.png"); //load the picture
             }
-            if(isattacking == true && angle >135)
+            if(isattacking == true && angle >135)//if you attack to the left of the player the hitbox will appear there
             {
                 hitbox = new Rectangle((int) xpos-110, (int) ypos-60, (int) width+20, (int) height+60);
                 slice = Toolkit.getDefaultToolkit().getImage("Slash_copy_2.png"); //load the picture
             }
-            if(isattacking == true && angle <135 && angle >45)
+            if(isattacking == true && angle <135 && angle >45)//if you attack below the player the hitbox will appear there
             {
                 slice = Toolkit.getDefaultToolkit().getImage("down.png"); //load the picture
             hitbox = new Rectangle((int) xpos-60, (int) ypos+50, (int) width+60, (int) height+20);

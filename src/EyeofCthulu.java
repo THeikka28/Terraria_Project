@@ -113,7 +113,7 @@ public class EyeofCthulu {
 
     public void dash()//the boss dashes at the player, and keeps going until it hits the screen then turns again and dashes
     {
-        if(System.currentTimeMillis()-hidetime>(Math.random()*1000)+5000)//males the boss change behavior after 5 seconds, same as the other one
+        if(System.currentTimeMillis()-hidetime>(Math.random()*1000)+5000)//makes the boss change behavior after 5 seconds, same as the other if statments with rand
         {
             int rand = (int)(Math.random()*3)+1;
             hidetime = System.currentTimeMillis();
@@ -133,15 +133,15 @@ public class EyeofCthulu {
                 isfollowing = false;
             }
         }
-        if (health >1000)
+        if (health >1000) //ensures that the speed while dashing but not in the second phase is sufficient
         {
             speed = 15;
         }
-        if (health >= 400 && health<=1000)
+        if (health >= 400 && health<=1000) //when in the second phase, the boss speeds up as it's health goes down
         {
             speed = 10000 / (health);
         }
-        else if(health<=300)
+        else if(health<=300)// makes sure the bosses' speed doesnt get too fast
         {
             speed = 10000/300;
         }
@@ -150,23 +150,23 @@ public class EyeofCthulu {
             speed = 7;
         }
 
-        if(xpos>1000)
+        if(xpos>1000)// when the boss exits the screen it turns to face the player again to dash again
         {
             isturning = true;
         }
-        if(xpos<0)
+        if(xpos<0)// when the boss exits the screen it turns to face the player again to dash again
         {
             isturning = true;
         }
-        if(ypos>700)
+        if(ypos>700)// when the boss exits the screen it turns to face the player again to dash again
         {
             isturning = true;
         }
-        if(ypos<0)
+        if(ypos<0)// when the boss exits the screen it turns to face the player again to dash again
         {
             isturning = true;
         }
-        if(xpos<1000 && xpos>0&&ypos<700 && ypos>0)
+        if(xpos<1000 && xpos>0&&ypos<700 && ypos>0) //when in the screen, the boss does not turn it's direction'
         {
             isturning = false;
         }

@@ -485,7 +485,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		else{	g.fillRect(15, 40, 200,40 );}
 		if(player.cooldown == true)//shows the health potion cooldown when it is still ongoing
 		{g.drawImage(cooldown, 10, 90, 40,45, null);}
-		g.drawImage(Slime, slimy.hitbox.x, slimy.hitbox.y, slimy.hitbox.width, slimy.hitbox.height, null);
+		if(slimy.isAlive == true ) {
+			g.drawImage(Slime, slimy.hitbox.x, slimy.hitbox.y, slimy.hitbox.width, slimy.hitbox.height, null);}
 		g.dispose();
 
 
@@ -522,7 +523,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			if(System.currentTimeMillis()- player.dash<350 && System.currentTimeMillis()- player.dashcooldown >1500)
 			{//if the dash cooldown has ended, then you can dash
 				player.dx = -20;
-				player.iframes = System.currentTimeMillis();
+				player.iframes = System.currentTimeMillis()+200;
 				player.dashcooldown = System.currentTimeMillis();
 			}
 			player.dash = System.currentTimeMillis();
@@ -542,7 +543,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			if(System.currentTimeMillis()- player.dash<350 && System.currentTimeMillis()- player.dashcooldown >1500)
 			{
 				player.dx = 20;
-				player.iframes = System.currentTimeMillis();
+				player.iframes = System.currentTimeMillis()+200;
 				player.dashcooldown = System.currentTimeMillis();
 			}
 			player.dash = System.currentTimeMillis();

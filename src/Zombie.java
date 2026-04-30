@@ -29,7 +29,7 @@ public class Zombie {
 
     //This is a SECOND constructor that takes 3 parameters.  This allows us to specify the hero's name and position when we build it.
     // if you put in a String, an int and an int the program will use this constructor instead of the one above.
-    public Zombie(int pXpos, int pYpos) {
+    public Zombie(int pXpos, int pYpos) {//initializes the zombie, and draws their hitbox
         xpos = pXpos;
         ypos = pYpos;
         dx =-4;
@@ -45,13 +45,13 @@ public class Zombie {
     } // constructor
 
     //The move method.  Everytime this is run (or "called") the hero's x position and y position change by dx and dy
-    public void move() {
+    public void move() {//moves the zombie around
         xpos = xpos + dx;
         ypos = ypos + dy;
         hitbox = new Rectangle(xpos, ypos, width, height);
-        if(xpos<0)
+        if(xpos<0)//makes them wrap around the screen
         {xpos = 1000;}
-        if(health<0)
+        if(health<0)//zombie dies when they run out of health
         {isAlive = false;}
  
     }

@@ -40,7 +40,7 @@ public class    Terrarian {
 
     //This is a SECOND constructor that takes 3 parameters.  This allows us to specify the hero's name and position when we build it.
     // if you put in a String, an int and an int the program will use this constructor instead of the one above.
-    public Terrarian(int pXpos, int pYpos) {
+    public Terrarian(int pXpos, int pYpos) {//initializes the player
         xpos = pXpos;
         ypos = pYpos;
         dx =1;
@@ -58,7 +58,7 @@ public class    Terrarian {
 
 
     //The move method.  Everytime this is run (or "called") the hero's x position and y position change by dx and dy
-    public void move() {
+    public void move() {//moves the player around, and draws their hitbox
         xpos = xpos + dx;
         ypos = ypos + dy;
         hitbox = new Rectangle((int)xpos, (int)ypos, (int)width, (int)height);
@@ -67,14 +67,14 @@ public class    Terrarian {
             dy = dy + 0.5;
         }
 
-        if(System.currentTimeMillis()-healtime < 30000)
+        if(System.currentTimeMillis()-healtime < 30000)//makes the cooldown for health potions, changes if the player can heal depending on the time simnce they last did
         {cooldown = true;}
         else {cooldown = false;}
     }
 
-    public void heal()
+    public void heal()//lets the player heal themselves if the cooldown has ended
     {if(System.currentTimeMillis()-healtime > 30000)
-    {
+    {//heals the player 100 health if they try and if the cooldown has ended
         System.out.println(health);
         health = health+100;
         System.out.println("healed");
