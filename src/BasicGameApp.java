@@ -503,7 +503,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
-		if(e.getKeyCode() == 49) {//whhen you press 1, the boss and it's minions are spawned it
+		if(e.getKeyCode() == 49) {//when you press 1, the boss and it's minions are spawned it
 			boss.isAlive = true;
 			boss.xpos = 100;
 			boss.ypos = 55;
@@ -517,7 +517,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 		{player.heal();}
 
 
-		if(e.getKeyCode() == 65 && player.dx>-10)//when you double press a or d the player does a dash
+		if(e.getKeyCode() == 65 && player.dx>-10)//when you double press a the player does a dash, and when you hold it the player moves left
 		{
 			left = true;
 			if(System.currentTimeMillis()- player.dash<350 && System.currentTimeMillis()- player.dashcooldown >1500)
@@ -529,7 +529,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			player.dash = System.currentTimeMillis();
 
 		}
-		if(e.getKeyCode() == 32)
+		if(e.getKeyCode() == 32)// if you press space
 		{
 			if(player.isgrounded == true) //lets the player jump while on the ground
 			{
@@ -537,10 +537,10 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 				player.ypos = player.ypos - 10;
 			}
 		}
-		if(e.getKeyCode() == 68 && player.dx<10)//lets the player move or dash depending on if they double press and if the cooldown has eneded
+		if(e.getKeyCode() == 68 && player.dx<10)//if the player presses right
 		{
 			right = true;
-			if(System.currentTimeMillis()- player.dash<350 && System.currentTimeMillis()- player.dashcooldown >1500)
+			if(System.currentTimeMillis()- player.dash<350 && System.currentTimeMillis()- player.dashcooldown >1500)//lets the player move or dash depending on if they double press and if the cooldown has eneded
 			{
 				player.dx = 20;
 				player.iframes = System.currentTimeMillis()+200;
